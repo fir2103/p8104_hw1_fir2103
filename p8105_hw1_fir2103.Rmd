@@ -1,0 +1,62 @@
+---
+title: "p8105_hw1_fir2103"
+author: "Farizah Rob"
+date: "2022-09-24"
+output: github_document
+---
+
+```{r}
+library(tidyverse)
+```
+
+### Problem 1
+
+```{r}
+data("penguins", package = "palmerpenguins")
+```
+
+Exploring the data
+
+```{r}
+names(penguins)
+nrow(penguins)
+ncol(penguins)
+mean(penguins$flipper_length_mm, na.rm=TRUE)
+```
+
+The dataset has 344 rows and 8 columns. The variables are species of the penguins, the island they're located, the length of their bill and flipper, depth of their bill (all in mm), body mass (in grams), sex and the study year (2007, 2008 or 2009). There are three species represented (Adélie, Chinstrap and Gentoo), three islands (Biscoe, Dream and Torgersen). 
+
+The mean flipper length is 200.9 mm. 
+
+```{r}
+ggplot(penguins) + 
+  geom_point(aes(x=bill_length_mm, y=flipper_length_mm, color=species))
+
+ggsave("scatterplot_penguins.pdf")
+```
+
+### Problem 2
+
+```{r}
+new_df <- tibble(
+  norm_samp = rnorm(10), 
+  norm_samp_pos = norm_samp > 0,
+  char_vec = c("a", "b", "c", "d", "e", "f", "g", "h", "i", "j"),
+  factor_vec = factor(c("good", "medium", "bad", "good", "medium", "bad", 
+                        "good", "medium", "bad", "good"), levels=3)
+)
+
+new_df %>% pull(norm_samp) %>% mean()
+new_df %>% pull(norm_samp_pos) %>% mean()
+new_df %>% pull(char_vec) %>% mean()
+new_df %>% pull(factor_vec) %>% mean()
+```
+
+The mean for the random normal sample vector and the logical vector work (-0.09 and 0.4 respectively). The mean for the character vector and factor vector come out as NA since they aren't numeric or logical.
+
+```{r, eval=FALSE}
+new_df %>% pull(char_vec) %>% as.numeric() %>% mean()
+new_df %>% pull(factor_vec) %>% as.numeric() %>% mean()
+```
+
+Both of the means are still NA. For a character vector, it would always be NA. If the factor vector had numbers that could be coerced from character to numeric, then it would produce a mean. 
