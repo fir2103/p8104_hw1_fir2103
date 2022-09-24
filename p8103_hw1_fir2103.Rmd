@@ -9,7 +9,7 @@ output: github_document
 library(tidyverse)
 ```
 
-Problem 1
+### Problem 1
 
 ```{r}
 data("penguins", package = "palmerpenguins")
@@ -35,3 +35,28 @@ ggplot(penguins) +
 ggsave("scatterplot_penguins.pdf")
 ```
 
+### Problem 2
+
+```{r}
+new_df <- tibble(
+  norm_samp = rnorm(10), 
+  norm_samp_pos = norm_samp > 0,
+  char_vec = c("a", "b", "c", "d", "e", "f", "g", "h", "i", "j"),
+  factor_vec = factor(c("good", "medium", "bad", "good", "medium", "bad", 
+                        "good", "medium", "bad", "good"), levels=3)
+)
+
+new_df %>% pull(norm_samp) %>% mean()
+new_df %>% pull(norm_samp_pos) %>% mean()
+new_df %>% pull(char_vec) %>% mean()
+new_df %>% pull(factor_vec) %>% mean()
+```
+
+The mean for the random normal sample vector and the logical vector work (-0.09 and 0.4 respectively). The mean for the character vector and factor vector come out as NA since they aren't numeric or logical.
+
+```{r, eval=FALSE}
+new_df %>% pull(char_vec) %>% as.numeric() %>% mean()
+new_df %>% pull(factor_vec) %>% as.numeric() %>% mean()
+```
+
+Both of the means are still NA. For a character vector, it would always be NA. If the factor vector had numbers that could be coerced from character to numeric, then it would produce a mean. 
